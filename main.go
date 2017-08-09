@@ -15,6 +15,17 @@ const timeline = `
  1811: Birth of William Thackeray
 `
 
+type item struct {
+	//when this happened
+	Date int
+	//the description
+	Desc string
+	//whether the item is raised. Ie on the second or first line above/below the timeline
+	Raised bool
+}
+
 func main() {
 	fmt.Println(timeline)
+	var testItem = item{2007, "Random date", true}
+	fmt.Println(testItem.Date, testItem.Desc, testItem.Raised)
 }
