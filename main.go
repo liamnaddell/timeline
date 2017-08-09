@@ -5,7 +5,7 @@ package main
 
 import "fmt"
 
-const timeline = `
+const tl = `
 //examples:↳↱↑↓
 
   1863: Death of William Thackeray
@@ -15,17 +15,26 @@ const timeline = `
  1811: Birth of William Thackeray
 `
 
-type item struct {
+type date struct {
 	//when this happened
-	Date int
+	Date int `json:"date"`
 	//the description
-	Desc string
-	//whether the item is raised. Ie on the second or first line above/below the timeline
-	Raised bool
+	Desc string `json:"desc"`
+}
+
+type timeline struct {
+	Dates []date `json:"dates"`
+}
+
+var ttl timeline
+
+func init() {
+	var testItem = date{2007, "Random date"}
+	var testItem2 = date{1234, "party time lol"}
+	ttl.Dates = append(ttl.Dates, testItem)
+	ttl.Dates = append(ttl.Dates, testItem2)
 }
 
 func main() {
-	fmt.Println(timeline)
-	var testItem = item{2007, "Random date", true}
-	fmt.Println(testItem.Date, testItem.Desc, testItem.Raised)
+	fmt.Println(ttl.Dates)
 }
