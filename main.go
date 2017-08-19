@@ -10,8 +10,11 @@ const timeline = `
     1620:The mayflower arrives in New Plymouth
     ↑    ↱1863: Death of William Thackeray
 <---------------------->
- ↓     ↳1811: Birth of William Thackeray
+ ↓    ↳1811: Birth of William Thackeray
  1492: Coloumbus sails the atlantic ocean
+
+ 1776: Signing of the Declaration of Independence
+
 `
 
 func main() {
