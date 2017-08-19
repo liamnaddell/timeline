@@ -6,56 +6,35 @@ package main
 import "fmt"
 
 const tl = `
-//examples:↳↱↑↓
+↥
+|⇒1811: Birth of William Thackeray
+|⇒1863: Death of William Thackeray
+↧
 
-  1863: Death of William Thackeray
-  ↑
-<-------------------->
- ↓
- 1811: Birth of William Thackeray
 `
 
-type date struct {
-	//when this happened
-	Date int `json:"date"`
-	//the description
-	Desc string `json:"desc"`
-}
+var id int
 
-type timemap map[int]dnd
+type timearray []*event
 
-//date no date
-//date without the date field
-//virtual only format
-//struct for now because I might add more fields later
-type dnd struct {
+type event struct {
 	Desc string
+	Time int
 }
 
-type timeline struct {
-	Dates []date `json:"dates"`
-}
-
-func (t *timeline) Map() timemap {
-	var final = make(timemap)
-	for i := 0; i < len(t.Dates); i++ {
-		curDate := t.Dates[i].Date
-		final[curDate] = dnd{t.Dates[i].Desc}
-	}
-	return final
-}
-
-var ttl timeline
+var timeline timearray
 
 func init() {
-	var testItem = date{2007, "Random date"}
-	var testItem2 = date{1234, "party time lol"}
-	ttl.Dates = append(ttl.Dates, testItem)
-	ttl.Dates = append(ttl.Dates, testItem2)
+	timeline.AddDate("Death of William Thackeray", 1863)
+	timeline.AddDate("Birth of William Thackeray", 1811)
+	timeline.AddDate("Death of death", 1653)
+	timeline.AddDate("turn of the year of 1920", 1921)
+	timeline.AddDate("turn of the year of 1821", 1821)
+	//timeline.DeleteDate(1)
 }
 
 func main() {
-	timeMap := ttl.Map()
-	fmt.Println(timeMap[1234])
-	timeMap.PrintMap()
+	fmt.Println(tl)
+	timeline.PrintTimeline()
+
 }
