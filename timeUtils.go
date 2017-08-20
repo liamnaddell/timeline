@@ -2,6 +2,9 @@ package main
 
 import "fmt"
 import "sort"
+import "encoding/gob"
+import "io/ioutil"
+import "bytes"
 
 func (t *timearray) PrintTimeline() {
 	timeline.Sort()
@@ -30,4 +33,33 @@ func (t *timearray) DeleteDate(i int) {
 	t.Sort()
 	i--
 	*t = append((*t)[:i], (*t)[i+1:]...)
+}
+
+func (t *timearray) Encode() {
+	var loc bytes.Buffer
+	enc := gob.NewEncoder(&loc)
+	err := enc.Encode(*t)
+	checkerr(err)
+	ret := loc.Bytes()
+	checkerr(ioutil.WriteFile("/home/liam/.timeline", ret, 0755))
+}
+
+func checkerr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func Load(filepath string) timearray {
+	var loc bytes.Buffer
+	var dec = gob.NewDecoder(&loc)
+	ret, err := ioutil.ReadFile(filepath)
+	checkerr(err)
+	n, err := loc.Write(ret)
+	fmt.Println(n)
+	checkerr(err)
+	var timeline timearray
+	err = dec.Decode(&timeline)
+	checkerr(err)
+	return timeline
 }
