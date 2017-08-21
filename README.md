@@ -4,6 +4,8 @@ A program for managing a timeline.
 
 ## Installing
 
+This program requires `dep` to be installed in order to manage packages correctly
+you can install it by running `go get -u github.com/golang/dep/cmd/dep` on linux, or `brew install dep`
 ```
 go get -d github.com/liamnaddell/timeline
 cd $GOPATH/src/github.com/liamnaddell/timeline
