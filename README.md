@@ -15,6 +15,8 @@ sudo make install
 
 `sudo make uninstall`
 
+this will remove it from /usr/local/bin
+
 ## How to use
 
 ```
