@@ -35,12 +35,16 @@ func main() {
 			Name:  "print",
 			Usage: "print the timeline",
 			Action: func(c *cli.Context) error {
+				var err error
 				var f = c.Int("t")
 				fmt.Printf("using timeline %d\n", f)
 				setpath(f)
-				timeline = Load(path)
+				timeline, err = Load(path)
+				if err != nil {
+					return errfmt(err)
+				}
 				timeline.PrintTimeline()
-				return nil
+				return errfmt(err)
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -53,13 +57,21 @@ func main() {
 			Name:  "add",
 			Usage: "add to the timeline",
 			Action: func(c *cli.Context) error {
+				var err error
 				var f = c.Int("t")
 				fmt.Printf("using timeline %d\n", f)
 				setpath(f)
-				timeline = Load(path)
-				timeline.AddDate(c.Args()[0], totime(c.Args()[1]))
+				timeline, err = Load(path)
+				if err != nil {
+					return errfmt(err)
+				}
+				t, err := totime(c.Args()[1])
+				if err != nil {
+					return errfmt(err)
+				}
+				timeline.AddDate(c.Args()[0], t)
 				timeline.Encode(path)
-				return nil
+				return errfmt(err)
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -72,13 +84,21 @@ func main() {
 			Name:  "remove",
 			Usage: "remove from the timeline",
 			Action: func(c *cli.Context) error {
+				var err error
 				var f = c.Int("t")
 				fmt.Printf("using timeline %d\n", f)
 				setpath(f)
-				timeline = Load(path)
-				timeline.DeleteDate(toint(c.Args().First()))
+				timeline, err = Load(path)
+				if err != nil {
+					return errfmt(err)
+				}
+				t, err := toint(c.Args().First())
+				if err != nil {
+					return errfmt(err)
+				}
+				timeline.DeleteDate(t)
 				timeline.Encode(path)
-				return nil
+				return errfmt(err)
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -91,12 +111,13 @@ func main() {
 			Name:  "create",
 			Usage: "create a new timeline",
 			Action: func(c *cli.Context) error {
+				var err error
 				var f = c.Int("t")
 				fmt.Printf("using timeline %d\n", f)
 				setpath(f)
 				NewTimeline(path)
 				timeline.Encode(path)
-				return nil
+				return errfmt(err)
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -116,14 +137,15 @@ func setpath(timeline int) {
 		}
 	}
 }
-func toint(s string) int {
+func toint(s string) (int, error) {
 	i, err := strconv.Atoi(s)
-	checkerr(err)
-	return i
+	return i, err
 }
 
-func totime(s string) time.Time {
+func totime(s string) (time.Time, error) {
 	t, err := time.Parse("20060102", s)
-	checkerr(err)
-	return t
+	return t, err
+}
+func errfmt(err error) *cli.ExitError {
+	return cli.NewExitError(err, 1)
 }

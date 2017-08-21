@@ -37,41 +37,50 @@ func (t *timearray) DeleteDate(i int) {
 	*t = append((*t)[:i], (*t)[i+1:]...)
 }
 
-func (t *timearray) Encode(filepath string) {
+func (t *timearray) Encode(filepath string) error {
 	var loc bytes.Buffer
 	enc := gob.NewEncoder(&loc)
 	err := enc.Encode(*t)
-	checkerr(err)
-	ret := loc.Bytes()
-	checkerr(ioutil.WriteFile(filepath, ret, 0755))
-}
-
-func checkerr(err error) {
 	if err != nil {
-		panic(err)
+		return err
 	}
+	ret := loc.Bytes()
+	err = ioutil.WriteFile(filepath, ret, 0755)
+	return err
 }
 
-func Load(filepath string) timearray {
+func Load(filepath string) (timearray, error) {
 	var loc bytes.Buffer
 	var dec = gob.NewDecoder(&loc)
 	ret, err := ioutil.ReadFile(filepath)
-	checkerr(err)
+	if err != nil {
+		return nil, err
+	}
 	_, err = loc.Write(ret)
-	checkerr(err)
+	if err != nil {
+		return nil, err
+	}
 	var timeline timearray
 	err = dec.Decode(&timeline)
-	checkerr(err)
-	return timeline
+	if err != nil {
+		return nil, err
+	}
+	return timeline, nil
 }
 
-func NewTimeline(filepath string) {
+func NewTimeline(filepath string) error {
 	var loc bytes.Buffer
 	var t = new(timearray)
 	enc := gob.NewEncoder(&loc)
 	err := enc.Encode(t)
-	checkerr(err)
+	if err != nil {
+		return err
+	}
 	ret := loc.Bytes()
-	checkerr(ioutil.WriteFile(filepath, ret, 0755))
+	err = ioutil.WriteFile(filepath, ret, 0755)
+	if err != nil {
+		return err
+	}
 	fmt.Printf("created new timeline at \"%s\"\n", filepath)
+	return nil
 }
