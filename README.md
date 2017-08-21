@@ -51,3 +51,14 @@ There will probably not be very many communications on this repo, so any way of 
 
 * Please don't be mean :)
 * you are not talking to brick walls, we all have feelings 
+
+## Work in progress
+
+this repo is currently being worked on
+
+### What needs to be done
+
+* Better error handling
+* Better docs while on command line
+* Developer guide
+* In line comments
