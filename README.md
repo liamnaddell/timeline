@@ -59,6 +59,6 @@ this repo is currently being worked on
 ### What needs to be done
 
 * Better error handling
-* Better docs while on command line
+* Better docs while on command line(im lookin at u subcommands)
 * Developer guide
 * In line comments
