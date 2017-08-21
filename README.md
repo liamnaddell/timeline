@@ -40,7 +40,7 @@ The timeline is stored in `~/.timeline`, and right now, you can only have one ti
 
 ## Contributing
 
-There will probably not be many communications on this repo, so any way of contacting issues/improvements is greatly appreciated
+There will probably not be very many communications on this repo, so any way of contacting issues/improvements is greatly appreciated
 
 ### Code of conduct
 
