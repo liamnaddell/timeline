@@ -11,6 +11,9 @@ make
 sudo make install
 (installs it to /usr/local/bin)
 ```
+## Uninstalling
+
+`sudo make uninstall`
 
 ## How to use
 
