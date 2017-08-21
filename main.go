@@ -23,7 +23,6 @@ var timeline timearray
 var Version string
 
 func main() {
-	//var actions = []string{"Print the timeline", "exit", "quit", "leave", "add", "delete", "remove"}
 	app := cli.NewApp()
 	app.Name = "timeline"
 	app.Usage = "Manage a timeline"
