@@ -20,6 +20,7 @@ type event struct {
 }
 
 var timeline timearray
+var Version string
 
 func main() {
 	//var actions = []string{"Print the timeline", "exit", "quit", "leave", "add", "delete", "remove"}
@@ -27,6 +28,7 @@ func main() {
 	app.Name = "timeline"
 	app.Usage = "Manage a timeline"
 	var home = os.Getenv("HOME")
+	app.Version = Version
 	app.Commands = []cli.Command{
 		{
 			Name:  "print",
