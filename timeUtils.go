@@ -35,13 +35,13 @@ func (t *timearray) DeleteDate(i int) {
 	*t = append((*t)[:i], (*t)[i+1:]...)
 }
 
-func (t *timearray) Encode() {
+func (t *timearray) Encode(filepath string) {
 	var loc bytes.Buffer
 	enc := gob.NewEncoder(&loc)
 	err := enc.Encode(*t)
 	checkerr(err)
 	ret := loc.Bytes()
-	checkerr(ioutil.WriteFile("/home/liam/.timeline", ret, 0755))
+	checkerr(ioutil.WriteFile(filepath, ret, 0755))
 }
 
 func checkerr(err error) {
@@ -62,4 +62,14 @@ func Load(filepath string) timearray {
 	err = dec.Decode(&timeline)
 	checkerr(err)
 	return timeline
+}
+
+func NewTimeline(filepath string) {
+	var loc bytes.Buffer
+	var t = new(timearray)
+	enc := gob.NewEncoder(&loc)
+	err := enc.Encode(t)
+	checkerr(err)
+	ret := loc.Bytes()
+	checkerr(ioutil.WriteFile(filepath, ret, 0755))
 }
