@@ -5,8 +5,10 @@ VERSION=0.0.1-alpha
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
 all:
+	# Dep is golang's official dependancy management test, the /vendor directory(created by dep ensure) can act as another GOPATH binary directory
 	$(DEP) ensure
 	$(GO) build $(LDFLAGS)
+	@mkdir ~/.timeline
 
 install:
 	mv timeline $(FINAL)
