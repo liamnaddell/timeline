@@ -5,13 +5,15 @@ import "sort"
 import "encoding/gob"
 import "io/ioutil"
 import "bytes"
+import "time"
 
 func (t *timearray) PrintTimeline() {
 	timeline.Sort()
 	fmt.Println("↥")
 	var i = 1
 	for _, value := range *t {
-		fmt.Printf("|⇒%d:: %d: %s\n", i, value.Time, value.Desc)
+		y, m, d := value.Time.Date()
+		fmt.Printf("|⇒%d:: %d %s %d: %s\n", i, y, m, d, value.Desc)
 		i++
 	}
 	fmt.Println("↧")
@@ -19,11 +21,11 @@ func (t *timearray) PrintTimeline() {
 
 func (t *timearray) Sort() {
 	sort.Slice(*t, func(i, j int) bool {
-		return (*t)[i].Time < (*t)[j].Time
+		return (*t)[i].Time.Before((*t)[j].Time)
 	})
 }
 
-func (t *timearray) AddDate(desc string, time int) {
+func (t *timearray) AddDate(desc string, time time.Time) {
 	var NewEvent = event{desc, time}
 	*t = append(*t, &NewEvent)
 	id++
@@ -55,8 +57,7 @@ func Load(filepath string) timearray {
 	var dec = gob.NewDecoder(&loc)
 	ret, err := ioutil.ReadFile(filepath)
 	checkerr(err)
-	n, err := loc.Write(ret)
-	fmt.Println(n)
+	_, err = loc.Write(ret)
 	checkerr(err)
 	var timeline timearray
 	err = dec.Decode(&timeline)
@@ -72,4 +73,5 @@ func NewTimeline(filepath string) {
 	checkerr(err)
 	ret := loc.Bytes()
 	checkerr(ioutil.WriteFile(filepath, ret, 0755))
+	fmt.Printf("created new timeline at \"%s\"\n", filepath)
 }

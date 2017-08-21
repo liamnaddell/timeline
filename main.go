@@ -8,6 +8,7 @@ import (
 	"github.com/urfave/cli"
 	"os"
 	"strconv"
+	"time"
 )
 
 /*const tl = `
@@ -25,7 +26,7 @@ type timearray []*event
 
 type event struct {
 	Desc string
-	Time int
+	Time time.Time
 }
 
 var timeline timearray
@@ -44,13 +45,13 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "timeline"
 	app.Usage = "Manage a timeline"
+	var home = os.Getenv("HOME")
 	app.Commands = []cli.Command{
 		{
 			Name:  "print",
 			Usage: "print the timeline",
 			Action: func(c *cli.Context) error {
-				timeline = Load("/home/liam/.timeline")
-				fmt.Println("other stuf: ")
+				timeline = Load(home + "/.timeline")
 				timeline.PrintTimeline()
 				return nil
 			},
@@ -59,8 +60,8 @@ func main() {
 			Name:  "add",
 			Usage: "add to the timeline",
 			Action: func(c *cli.Context) error {
-				timeline = Load("/home/liam/.timeline")
-				timeline.AddDate(c.Args()[0], toint(c.Args()[1]))
+				timeline = Load(home + "/.timeline")
+				timeline.AddDate(c.Args()[0], totime(c.Args()[1]))
 				return nil
 			},
 		},
@@ -68,7 +69,7 @@ func main() {
 			Name:  "remove",
 			Usage: "remove from the timeline",
 			Action: func(c *cli.Context) error {
-				timeline = Load("/home/liam/.timeline")
+				timeline = Load(home + "/.timeline")
 				timeline.DeleteDate(toint(c.Args().First()))
 				return nil
 			},
@@ -77,13 +78,17 @@ func main() {
 			Name:  "create",
 			Usage: "create a new timeline",
 			Action: func(c *cli.Context) error {
-				NewTimeline("/home/liam/.timeline")
+				NewTimeline(home + "/.timeline")
 				return nil
 			},
 		},
 	}
 	app.Run(os.Args)
-	timeline.Encode("/home/liam/.timeline")
+	timeline.Encode(home + "/.timeline")
+	//timeline.AddDate("my name a jeff kaplan", totime("20021211"))
+	//timeline.AddDate("my name a jeff", totime("20021210"))
+	//	timeline.PrintTimeline()
+
 }
 
 func help() {
@@ -94,4 +99,10 @@ func toint(s string) int {
 	i, err := strconv.Atoi(s)
 	checkerr(err)
 	return i
+}
+
+func totime(s string) time.Time {
+	t, err := time.Parse("20060102", s)
+	checkerr(err)
+	return t
 }
