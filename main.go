@@ -44,7 +44,7 @@ func main() {
 					return errfmt(err)
 				}
 				timeline.PrintTimeline()
-				return errfmt(err)
+				return nil
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -71,7 +71,7 @@ func main() {
 				}
 				timeline.AddDate(c.Args()[0], t)
 				timeline.Encode(path)
-				return errfmt(err)
+				return nil
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -98,7 +98,7 @@ func main() {
 				}
 				timeline.DeleteDate(t)
 				timeline.Encode(path)
-				return errfmt(err)
+				return nil
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
@@ -111,13 +111,12 @@ func main() {
 			Name:  "create",
 			Usage: "create a new timeline",
 			Action: func(c *cli.Context) error {
-				var err error
 				var f = c.Int("t")
 				fmt.Printf("using timeline %d\n", f)
 				setpath(f)
 				NewTimeline(path)
 				timeline.Encode(path)
-				return errfmt(err)
+				return nil
 			},
 			Flags: []cli.Flag{
 				cli.IntFlag{
